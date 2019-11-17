@@ -1,23 +1,12 @@
 var express = require("express");
-
 var app = express();
-var userModel = require("../models/userModel");
+var userController = require('../controllers/userController')
+var bodyParser = require("body-parser");
 
-app.get("/", (req, resp, next) => {
-  userModel.find({}, "name mail image rol").exec((error, users) => {
-    if (error) {
-      return resp.status(500).json({
-        ok: false,
-        msj: "Fail request Users",
-        error
-      });
-    }
-
-    resp.status(200).json({
-      ok: true,
-      users: users
-    });
-  });
-});
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.get('/usr', userController.test);
+app.get('/usrs', userController.users);
+app.post('/usr', userController.CreateUser);
 
 module.exports = app;
