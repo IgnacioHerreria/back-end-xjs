@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 
 //Requires
 var express = require("express");
@@ -13,20 +13,18 @@ var userRoutes = require("./routes/user");
 
 //Conecction DB
 //  Functionallitys
-mongoose.set('useFindAndModify', false);
+mongoose.set('useNewUrlParser', true)
+mongoose.set("useFindAndModify", true);
+mongoose.set("useCreateIndex", true);
 mongoose.Promise = global.Promise;
-mongoose.connect(
-    "mongodb://localhost:27017/Physiotherapy", { useNewUrlParse: true },
-    (err, res) => {
-        if (err) throw err;
-        console.log("Database mongo");
-    }
-);
-mongoose.set('useCreateIndex', true);
+mongoose.connect("mongodb://localhost:27017/Physiotherapy", (err, res) => {
+    if (err) throw err;
+    console.log("Database mongo");
+});
 
 // load routes
-app.use('/', appRoutes);
-app.use('/usr', userRoutes);
+app.use("/", appRoutes);
+app.use("/api/usr", userRoutes);
 
 const ENV_PORT = 3000;
 
