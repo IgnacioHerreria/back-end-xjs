@@ -9,7 +9,6 @@ var app = express();
 
 //Import routes
 var appRoutes = require("./routes/app");
-var userRoutes = require("./routes/user");
 
 //Conecction DB
 //  Functionallitys
@@ -23,8 +22,7 @@ mongoose.connect("mongodb://localhost:27017/Physiotherapy", (err, res) => {
 });
 
 // load routes
-app.use("/", appRoutes);
-app.use("/api/usr", userRoutes);
+app.use("/api", appRoutes);
 
 const ENV_PORT = 3000;
 
