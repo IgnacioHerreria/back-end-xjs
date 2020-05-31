@@ -1,18 +1,16 @@
 var express = require("express");
 var app = express();
 
-var userController = require('../controllers/userController')
-var bodyParser = require("body-parser");
+var userC = require("../controllers/userController");
 var multiParty = require("connect-multiparty");
-var md_upload = multiParty({ uploadDir: './upload/user' })
+var md_upload = multiParty({ uploadDir: "./upload/user" });
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.get('/usrs/:total?', userController.GetUsers);
-app.get('/:id', userController.GetUser);
-app.post('/usr', userController.CreateUser);
-app.post('/img', md_upload, userController.UploadImage);
-app.put('/:id', userController.UpdateUser);
-app.delete('/:id', userController.DeleteUser);
+app.get("/usrs/:total?", userC.GetUsers);
+app.get("/:id", userC.GetUser);
+app.post("/crt", userC.CreateUser);
+app.post("/img", md_upload, userC.UploadImage);
+app.get("/img/:id", userC.getUserImage);
+app.put("/:id", userC.UpdateUser);
+app.delete("/:id", userC.DeleteUser);
 
 module.exports = app;
