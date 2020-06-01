@@ -14,7 +14,7 @@ mongoose.set("useCreateIndex", true);
 mongoose.Promise = global.Promise;
 
 mongoose
-  .connect(process.env.URL_DB, {
+  .connect(process.env.URI_MONGODB, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
