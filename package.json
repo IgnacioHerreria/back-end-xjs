@@ -4,7 +4,8 @@
   "description": "Back end server node js",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node index.js",
+    "nodemon": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ignacio Herreria",
@@ -14,6 +15,7 @@
     "bcrypt": "^4.0.1",
     "connect-multiparty": "^2.2.0",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.16",
     "mongoose-unique-validator": "^2.0.3",
     "underscore": "^1.10.2",
