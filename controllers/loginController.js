@@ -1,57 +1,65 @@
 "use strict";
 const userModel = require("../models/userModel");
 const validator = require("validator");
-const fs = require("fs");
-const path = require("path");
 const bcrypt = require("bcrypt");
-const _ = require("underscore");
+const jwt = require("jsonwebtoken");
 
 var loginController = {
-  login: (req, res) => {
-    //Params
-    var params = req.body;
-    //Validator
-    try {
-      var validatorEmail = validator.isEmail(params.email);
-      var validatorName = !validator.isEmpty(params.name);
-      var validatorPassword = !validator.isEmpty(params.password);
-    } catch (err) {
-      return res.status(500).json({
-        ok: false,
-        msg: "Fail request Users",
-        err,
-      });
-    }
-    if (validatorEmail && validatorName && validatorPassword) {
-      //Create object - Set values
-      var newuser = new userModel({
-        name: params.name,
-        password: bcrypt.hashSync(params.password, 10),
-        mail: params.email,
-        rol: params.role,
-      });
-
-      newuser.save((err, userStored) => {
-        if (err || !userStored) {
-          return res.status(500).json({
-            ok: false,
-            msg: err + " " + userStored,
-          });
+    login: (req, res) => {
+        //Params
+        var params = req.body;
+        //Validator
+        try {
+            var validatorEmail = validator.isEmail(params.email);
+            var validatorPassword = !validator.isEmpty(params.password);
+        } catch (err) {
+            return res.status(500).json({
+                ok: false,
+                msg: "Fail request Users",
+                err,
+            });
         }
-        //Send response
-        return res.status(200).json({
-          ok: true,
-          msg: "Insert Data",
-          user: newuser,
-        });
-      });
-    } else {
-      return res.status(500).json({
-        ok: false,
-        msg: "Fail request Users",
-      });
-    }
-  },
+        if (validatorEmail && validatorPassword) {
+            userModel.findOne({ mail: params.email }, (err, user) => {
+                if (err) {
+                    return res.status(500).json({
+                        ok: false,
+                        msg: err,
+                    });
+                }
+                if (!user) {
+                    return res.status(400).json({
+                        ok: false,
+                        msg: "User or password incorrect",
+                    });
+                }
+                if (!bcrypt.compareSync(params.password, user.password)) {
+                    return res.status(400).json({
+                        ok: false,
+                        msg: "User or password incorrect",
+                    });
+                }
+
+                let token = jwt.sign({
+                        usuario: user._id,
+                    },
+                    process.env.SEED_TOKEN, { expiresIn: 60 * 60 }
+                );
+                //Send response
+                return res.status(200).json({
+                    ok: true,
+                    msg: "OK",
+                    user,
+                    token,
+                });
+            });
+        } else {
+            return res.status(500).json({
+                ok: false,
+                msg: "Fail request Users",
+            });
+        }
+    },
 };
 
 module.exports = loginController;
