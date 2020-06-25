@@ -7,8 +7,6 @@ const userRoutes = require("./user");
 const articleRoutes = require("./article");
 const loginRoutes = require("./login");
 
-//folder
-app.use(express.static(__dirname + "/public"));
 //middlewares
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
